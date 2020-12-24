@@ -1,0 +1,22 @@
+{
+  "name": "middleware",
+  "description": "COMPS381F -Demo",
+  "version": "0.0.1",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-session": "^1.4.0",
+    "curl": "^0.1.4",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "express-session": "latest",
+    "model": "^6.0.1",
+    "mongodb": "^3.6.3",
+    "mongoose": "^5.11.8",
+    "multer": "^0.1.8"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engine": "*"
+}
