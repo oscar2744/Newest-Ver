@@ -1,0 +1,73 @@
+<HTML>
+
+<head>
+   <title>
+      <%= source[0].name %>
+
+   </title>
+</head>
+<BODY>
+
+
+<%if (source[0].photo !="") {%>
+	<img src="data:image/png;base64, <%= source[0].img.data %>"><br>
+<%}%>
+<table>
+         <tr><th><H2><%= source[0].name %></H2></th></tr>
+
+         <tr>
+            <td>ID:</td>
+            <td><%= source[0]._id %></td>
+         </tr>
+
+
+         <% if (source[0].borough) { %>
+            <tr><td>Borough:</td>
+ 		<td><%= source[0].borough %></td>
+            </tr><%}%>
+
+               <% if (source[0].cuisine) { %>
+                  <tr>
+                     <td>Cuisine:</td>
+                     <td>
+                        <%= source[0].cuisine %>
+                     </td>
+                  </tr>
+                  <%}%>
+
+                     <% if (source[0].street) { %>
+                        <tr>
+                           <td>Street:</td>
+                           <td>
+                              <%= source[0].street %>
+                           </td>
+                        </tr>
+
+                        <%} if (source[0].building) { %>
+                           <tr>
+                              <td>Building:</td>
+                              <td>
+                                 <%= source[0].building %>
+                              </td>
+                           </tr>
+
+                           <% }if (source[0].zipcode) { %>
+                              <tr>
+                                 <td>Zipcode:</td>
+                                 <td>
+                                    <%= source[0].zipcode %>
+                                 </td>
+                              </tr>
+ <%}%>
+                			<tr>
+                                             <td>Owner:</td>
+                                             <td>
+                                                <%= source[0].owner %>
+                                             </td>
+                                          </tr>
+</table>
+
+   </BODY>
+</HTML>
+
+

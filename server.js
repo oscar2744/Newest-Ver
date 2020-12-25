@@ -9,6 +9,8 @@ const dbName = 'test';
 const fs = require('fs');
 const mongoose = require('mongoose');
 const multer = require('multer');
+const ObjectID = require('mongodb').ObjectID;
+const mongo = require('mongodb');
 
 const restSch = mongoose.Schema({
 	"name": String,
@@ -65,47 +67,76 @@ app.use(session({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
 const findrestaurant = (db, criteria, callback) => {
     let cursor = db.collection('rests').find(criteria);
     //console.log(`findRestaurant: ${JSON.stringify(criteria)}`);
     cursor.toArray((err,docs) => {
         assert.equal(err,null);
-        console.log(`findRestaurant: ${docs.length}`);
         callback(docs);
     });
 }
 
-const handle_select_all_restaurant = (res,req) => {
+const handle_show= (res,req) => {
     const client = new MongoClient(mongourl);
     client.connect((err) => {
         assert.equal(null, err);
-        console.log("Connected successfully to server");
         const db = client.db(dbName);
 	
-	let num = db.collection('rests').find()
-	    num.toArray((err,docs)=>{
+	let data = db.collection('rests').find()
+	    data.toArray((err,docs)=>{
 			assert.equal(err,null);
-			console.log(`rests count: ${docs.length}`)
 			client.close()
-			res.render('list', {c: docs,username: req.session.username,criteria:JSON.stringify({})});
+			res.render('list', {source: docs,username: req.session.username,criteria:JSON.stringify({})});
 
 	});
     });
 }
 
-app.get('/read', function(req,res) {
-	handle_select_all_restaurant(res,req);
+
+
+
+const handle_detail = (req,res, criteria) => {
+    const client = new MongoClient(mongourl);
+    client.connect((err) => {
+        assert.equal(null, err);
+        const db = client.db(dbName);
+
+        findrestaurant(db, criteria, (docs) => {
+            client.close();
+	    if(docs){	
+			res.render('details', {source: docs,req:req});
+		}else{
+			res.status(404).end(criteria + ' not found!');
+			}       
+        });
+    });
+}
+
+
+
+app.get('/read', (req,res)=> {
+	handle_show(res,req);
 });
 
 
+app.get('/details', (req,res) => {
+	if (req.query.id) {
+		let criteria={};
+		id = new mongo.ObjectID(req.query.id);
+		criteria['_id']=id;
+	     
+            handle_detail(req,res,criteria,req);
+	} else {
+		res.status(404).end('NOT FOUND');
+	}
+});
 
 app.get('/', (req,res) => {
 	console.log(req.session);
 	if (!req.session.authenticated) {    // user not logged in!
 		res.redirect('/login');
 	} else {
-		res.status(200).render('secrets',{name:req.session.username});
+		res.status(200).render('list',{name:req.session.username});
 	}
 });
 
@@ -187,6 +218,7 @@ app.post('/create', function(req,res) {
 			if (err) throw err 
 			console.log('create successful!')
 			db.close();
+			res.status(200).end('create successful');
 			});
 		});
 	});
