@@ -15,11 +15,14 @@ const mongo = require('mongodb');
 const restSch = mongoose.Schema({
 	"name": String,
 	"cuisine": String,
+	"borough": String,
+	address:{
 	"street": String,
 	"building": String,
 	"zipcode": Number,
-	"GPS(lon)": Number,
-	"GPS(lat)": Number,
+	coord:{"GPS(lon)": Number,
+	       "GPS(lat)": Number}
+},
 	img: {
 		data: Buffer,
 		contentType: String},
@@ -114,6 +117,9 @@ const handle_detail = (req,res, criteria) => {
 
 
 
+
+
+
 app.get('/read', (req,res)=> {
 	handle_show(res,req);
 });
@@ -201,17 +207,26 @@ app.post('/create', function(req,res) {
 		const obj = new Rest(
 		{
 		"name": req.body.name,
+		"borough": req.body.borough,
 		"cuisine": req.body.cuisine,
-		"street": req.body.street,
-		"building": req.body.building,
-		"zipcode": req.body.zipcode,
-		"GPS(lon)": req.body.lon,
-		"GPS(lat)": req.body.lat,
+		"address":{	
+			"street": req.body.street,
+			"building": req.body.building,
+			"zipcode": req.body.zipcode,
+			"coord":{
+				"GPS(lon)": req.body.lon,
+				"GPS(lat)": req.body.lat,
+				}
+			},
 		"img": {
 			"data": Buffer.from(data).toString('base64'),
 			"contentType": 'image/png'
 			},
-		"owner": req.body.owner
+		"owner": req.session.username,
+		"grades":{
+			"user":"",
+			"score":0
+			}
                 
 		});
 		obj.save((err) => {
@@ -223,5 +238,9 @@ app.post('/create', function(req,res) {
 		});
 	});
 });
+
+
+
+
 app.listen(process.env.PORT || 8099);
 
