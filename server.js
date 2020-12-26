@@ -72,7 +72,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const findrestaurant = (db, criteria, callback) => {
     let cursor = db.collection('rests').find(criteria);
-    //console.log(`findRestaurant: ${JSON.stringify(criteria)}`);
     cursor.toArray((err,docs) => {
         assert.equal(err,null);
         callback(docs);
@@ -117,6 +116,28 @@ const handle_detail = (req,res, criteria) => {
 
 
 
+
+const handle_search = (res,req) => {
+    const client = new MongoClient(mongourl);
+    client.connect((err) => {
+        assert.equal(null, err);
+		const db = client.db(dbName);
+		let criteria = {};
+		criteria[req.body.sortMethod] = req.body.sortValue;
+		if(req.body.sortMethod && req.body.sortValue){
+			findrestaurant(db, criteria, (docs) => {
+				client.close();
+			if(docs){
+				res.render('list', {source: docs,username: req.session.username,criteria:JSON.stringify(criteria)});
+			}
+			});	
+		}else{
+			handle_show(res,req)
+		}
+			
+
+    });
+}
 
 
 
@@ -239,6 +260,12 @@ app.post('/create', function(req,res) {
 	});
 });
 
+app.post('/search', (req,res) => {
+	//restaurant_id is _id
+	restaurant_id = req.body.restaurant_id;
+	handle_search(res,req);
+	
+});
 
 
 

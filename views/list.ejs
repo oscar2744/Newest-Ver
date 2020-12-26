@@ -2,18 +2,36 @@
 <%- include('myview.ejs') %>
 
 	<BODY>
+		<br></br>
 		<h3>Hi <%= username%></h3>
 		
 		<div>
 		<div>
 			<H1>Showing <%= source.length %> Restaurants</H1>
 			<% if(criteria!="{}"){%>
-				<div><p><%= criteria %>&nbsp;<a href="/"><button type="button">Reset</button></a></p></div>
+				<div><p><%= criteria %><a href="/"><button type="button">Reset</button></a></p></div>
 				
 			<%} %>
-			
 		</div>
 </div>
+
+<form action="/search" method="POST" id="search">
+				
+				<input type="radio" id="name" name="sortMethod" value="name" />
+				<label for="name">Name</label>
+				<input type="radio" id="borough" name="sortMethod" value="borough" />
+				<label for="borough">Borough</label>
+				<input type="radio" id="cuisine" name="sortMethod" value="cuisine" />
+				<label for="cuisine">Cuisine</label>
+				
+				<div class="input-group">
+					<input type="text" name="sortValue" placeholder="Name, Borough or cuisine."/>
+					<div>
+						<button style="width:125px;height:25px"type="submit" form="search" value="Submit">Search</button>
+					</div>
+				</div>
+			</form>
+		</div>
 <a href='/create'><button>Add New Restaurant</button></a>
 	<table>
 	<% source.forEach(function(restaurant) { %>

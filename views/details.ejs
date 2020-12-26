@@ -37,27 +37,27 @@
                   </tr>
                   <%}%>
 
-                     <% if (source[0].street) { %>
+                     <% if (source[0].address.street) { %>
                         <tr>
                            <td>Street:</td>
                            <td>
-                              <%= source[0].street %>
+                              <%= source[0].address.street %>
                            </td>
                         </tr>
 
-                        <%} if (source[0].building) { %>
+                        <%} if (source[0].address.building) { %>
                            <tr>
                               <td>Building:</td>
                               <td>
-                                 <%= source[0].building %>
+                                 <%= source[0].address.building %>
                               </td>
                            </tr>
 
-                           <% }if (source[0].zipcode) { %>
+                           <% }if (source[0].address.zipcode) { %>
                               <tr>
                                  <td>Zipcode:</td>
                                  <td>
-                                    <%= source[0].zipcode %>
+                                    <%= source[0].address.zipcode %>
                                  </td>
                               </tr>
  <%}%>
