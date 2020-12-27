@@ -87,7 +87,7 @@ const handle_show= (res,req) => {
 	let data = db.collection('rests').find()
 	    data.toArray((err,docs)=>{
 			assert.equal(err,null);
-			client.close()
+			client.close();
 			res.render('list', {source: docs,username: req.session.username,criteria:JSON.stringify({})});
 
 	});
@@ -102,7 +102,6 @@ const handle_detail = (req,res, criteria) => {
     client.connect((err) => {
         assert.equal(null, err);
         const db = client.db(dbName);
-
         findrestaurant(db, criteria, (docs) => {
             client.close();
 	    if(docs){	
@@ -160,10 +159,11 @@ app.get('/details', (req,res) => {
 
 app.get('/', (req,res) => {
 	console.log(req.session);
+	handle_show(req,res);
 	if (!req.session.authenticated) {    // user not logged in!
 		res.redirect('/login');
 	} else {
-		res.status(200).render('list',{name:req.session.username});
+		res.status(200).render('list',{source: docs,username: req.session.username,criteria:JSON.stringify({})});
 	}
 });
 
@@ -196,10 +196,7 @@ app.get('/register',(req,res)=>{
 
 app.post('/register',(req,res)=>{
 	users.push({name:req.body.name,password:req.body.password});
-	console.log(users);
 	req.session.username= req.body.name;
-	console.log(req.session.username);
-
 });
 
 
@@ -261,7 +258,6 @@ app.post('/create', function(req,res) {
 });
 
 app.post('/search', (req,res) => {
-	//restaurant_id is _id
 	restaurant_id = req.body.restaurant_id;
 	handle_search(res,req);
 	

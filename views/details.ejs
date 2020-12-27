@@ -13,7 +13,6 @@
 	<img src="data:image/png;base64, <%= source[0].img.data %>"><br>
 <%}%>
 
-  <a href="/rate?rest_id=<%=source[0]._id %>"><button type="button">Rate</button></a>;
 <table>
          <tr><th><H2><%= source[0].name %></H2></th></tr>
 
@@ -23,12 +22,12 @@
          </tr>
 
 
-         <% if (source[0].borough) { %>
+         <% if (source[0].borough!="") { %>
             <tr><td>Borough:</td>
  		<td><%= source[0].borough %></td>
             </tr><%}%>
 
-               <% if (source[0].cuisine) { %>
+               <% if (source[0].cuisine!="") { %>
                   <tr>
                      <td>Cuisine:</td>
                      <td>
@@ -36,8 +35,8 @@
                      </td>
                   </tr>
                   <%}%>
-
-                     <% if (source[0].address.street) { %>
+		  
+                     <% if (source[0].address.street!="") { %>
                         <tr>
                            <td>Street:</td>
                            <td>
@@ -45,7 +44,7 @@
                            </td>
                         </tr>
 
-                        <%} if (source[0].address.building) { %>
+                        <%} if (source[0].address.building!="") { %>
                            <tr>
                               <td>Building:</td>
                               <td>
@@ -53,7 +52,7 @@
                               </td>
                            </tr>
 
-                           <% }if (source[0].address.zipcode) { %>
+                           <% }if (source[0].address.zipcode!="") { %>
                               <tr>
                                  <td>Zipcode:</td>
                                  <td>
@@ -61,6 +60,7 @@
                                  </td>
                               </tr>
  <%}%>
+
                 			<tr>
                                              <td>Owner:</td>
                                              <td>
